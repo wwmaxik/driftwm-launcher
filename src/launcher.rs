@@ -1,6 +1,6 @@
 use crate::app_entry::AppEntry;
-use fuzzy_matcher::skim::SkimMatcherV2;
 use fuzzy_matcher::FuzzyMatcher;
+use fuzzy_matcher::skim::SkimMatcherV2;
 use gtk4::prelude::*;
 use gtk4::{Label, ListBox, ListBoxRow};
 use std::process::Command;
@@ -42,11 +42,7 @@ pub fn filter_list(list_box: &ListBox, apps: &[AppEntry], query: &str) {
             let desc_score = matcher.fuzzy_match(&app.description, query).unwrap_or(0);
             let score = name_score.max(desc_score);
 
-            if score > 0 {
-                Some((score, app))
-            } else {
-                None
-            }
+            if score > 0 { Some((score, app)) } else { None }
         })
         .collect();
 
