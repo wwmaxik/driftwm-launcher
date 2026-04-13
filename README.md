@@ -110,6 +110,12 @@ margin_top = 100
 
 GPLv3
 
+## Contributing
+
+Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+
+See also: [Code of Conduct](CODE_OF_CONDUCT.md)
+
 ## Credits
 
 Built for [driftwm](https://github.com/malbiruk/driftwm) compositor.
