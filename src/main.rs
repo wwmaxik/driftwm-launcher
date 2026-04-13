@@ -27,10 +27,13 @@ fn main() {
 }
 
 fn build_ui(app: &Application) {
+    // Load config
+    let cfg = config::LauncherConfig::load();
+
     let window = ApplicationWindow::builder()
         .application(app)
-        .default_width(600)
-        .default_height(400)
+        .default_width(cfg.width)
+        .default_height(cfg.height)
         .build();
 
     // Initialize layer shell
@@ -38,13 +41,29 @@ fn build_ui(app: &Application) {
     window.set_layer(Layer::Overlay);
     window.set_keyboard_mode(gtk4_layer_shell::KeyboardMode::Exclusive);
 
-    // Anchor to top center
-    window.set_anchor(Edge::Top, true);
-    window.set_anchor(Edge::Left, false);
-    window.set_anchor(Edge::Right, false);
-    window.set_anchor(Edge::Bottom, false);
-
-    window.set_margin(Edge::Top, 100);
+    // Anchor based on config
+    match cfg.position {
+        config::Position::Top => {
+            window.set_anchor(Edge::Top, true);
+            window.set_anchor(Edge::Left, false);
+            window.set_anchor(Edge::Right, false);
+            window.set_anchor(Edge::Bottom, false);
+            window.set_margin(Edge::Top, cfg.margin_top);
+        }
+        config::Position::Center => {
+            window.set_anchor(Edge::Top, false);
+            window.set_anchor(Edge::Left, false);
+            window.set_anchor(Edge::Right, false);
+            window.set_anchor(Edge::Bottom, false);
+        }
+        config::Position::Bottom => {
+            window.set_anchor(Edge::Bottom, true);
+            window.set_anchor(Edge::Left, false);
+            window.set_anchor(Edge::Right, false);
+            window.set_anchor(Edge::Top, false);
+            window.set_margin(Edge::Bottom, cfg.margin_top);
+        }
+    }
 
     // Main container
     let vbox = gtk4::Box::new(gtk4::Orientation::Vertical, 12);

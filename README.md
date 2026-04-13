@@ -2,6 +2,7 @@
 
 Minimal Wayland application launcher for driftwm compositor.
 
+![CI](https://github.com/wwmaxik/driftwm-launcher/workflows/CI/badge.svg)
 ![Rust](https://img.shields.io/badge/rust-1.85%2B-orange)
 ![GTK](https://img.shields.io/badge/GTK-4-green)
 ![License](https://img.shields.io/badge/license-GPLv3-blue)
@@ -41,7 +42,20 @@ sudo dnf install gtk4-devel gtk4-layer-shell-devel rust cargo
 git clone https://github.com/wwmaxik/driftwm-launcher.git
 cd driftwm-launcher
 cargo build --release
-sudo cp target/release/driftwm-launcher /usr/local/bin/
+```
+
+### Install
+
+```bash
+sudo make install
+```
+
+This installs the binary to `/usr/local/bin/driftwm-launcher`.
+
+### Uninstall
+
+```bash
+sudo make uninstall
 ```
 
 ## Usage

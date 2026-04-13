@@ -1,0 +1,11 @@
+# driftwm-launcher configuration
+
+# Window dimensions
+width = 600
+height = 400
+
+# Window position: "top", "center", or "bottom"
+position = "top"
+
+# Margin from edge (in pixels)
+margin_top = 100
