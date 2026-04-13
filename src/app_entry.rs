@@ -26,12 +26,11 @@ pub fn load_applications() -> Vec<AppEntry> {
     for path in &search_paths {
         if let Ok(entries) = std::fs::read_dir(path) {
             for entry in entries.flatten() {
-                if let Some(ext) = entry.path().extension() {
-                    if ext == "desktop" {
-                        if let Some(app) = parse_desktop_file(&entry.path()) {
-                            apps.push(app);
-                        }
-                    }
+                if let Some(ext) = entry.path().extension()
+                    && ext == "desktop"
+                    && let Some(app) = parse_desktop_file(&entry.path())
+                {
+                    apps.push(app);
                 }
             }
         }
