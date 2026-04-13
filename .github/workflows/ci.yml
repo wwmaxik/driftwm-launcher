@@ -13,55 +13,38 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    container:
+      image: debian:trixie
     steps:
       - uses: actions/checkout@v4
       
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev build-essential pkg-config meson ninja-build
-          # Install gtk4-layer-shell from source (without introspection and examples)
-          cd /tmp
-          git clone https://github.com/wmww/gtk4-layer-shell.git
-          cd gtk4-layer-shell
-          meson setup build -Dintrospection=false -Dexamples=false
-          ninja -C build
-          sudo ninja -C build install
-          sudo ldconfig
+          apt-get update
+          apt-get install -y libgtk-4-dev libgtk4-layer-shell-dev build-essential \
+            pkg-config curl git
       
       - name: Setup Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-      
-      - name: Cache cargo registry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-      
-      - name: Cache cargo index
-        uses: actions/cache@v3
-        with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
-      
-      - name: Cache cargo build
-        uses: actions/cache@v3
-        with:
-          path: target
-          key: ${{ runner.os }}-cargo-build-target-${{ hashFiles('**/Cargo.lock') }}
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
       
       - name: Check formatting
-        run: cargo fmt -- --check
+        run: |
+          . "$HOME/.cargo/env"
+          cargo fmt -- --check
       
       - name: Run clippy
-        run: cargo clippy -- -D warnings
+        run: |
+          . "$HOME/.cargo/env"
+          cargo clippy -- -D warnings
       
       - name: Build
-        run: cargo build --release --verbose
+        run: |
+          . "$HOME/.cargo/env"
+          cargo build --release --verbose
       
       - name: Run tests
-        run: cargo test --verbose
+        run: |
+          . "$HOME/.cargo/env"
+          cargo test --verbose
