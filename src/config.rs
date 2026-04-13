@@ -31,27 +31,27 @@ impl Default for LauncherConfig {
 impl LauncherConfig {
     pub fn load() -> Self {
         let config_path = Self::config_path();
-        
+
         if let Ok(contents) = std::fs::read_to_string(&config_path)
             && let Ok(config) = toml::from_str(&contents)
         {
             return config;
         }
-        
+
         Self::default()
     }
 
     #[allow(dead_code)]
     pub fn save(&self) -> Result<(), Box<dyn std::error::Error>> {
         let config_path = Self::config_path();
-        
+
         if let Some(parent) = config_path.parent() {
             std::fs::create_dir_all(parent)?;
         }
-        
+
         let contents = toml::to_string_pretty(self)?;
         std::fs::write(&config_path, contents)?;
-        
+
         Ok(())
     }
 
