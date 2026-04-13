@@ -20,11 +20,11 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y libgtk-4-dev build-essential pkg-config meson ninja-build
-          # Install gtk4-layer-shell from source (without introspection)
+          # Install gtk4-layer-shell from source (without introspection and examples)
           cd /tmp
           git clone https://github.com/wmww/gtk4-layer-shell.git
           cd gtk4-layer-shell
-          meson setup build -Dintrospection=false
+          meson setup build -Dintrospection=false -Dexamples=false
           ninja -C build
           sudo ninja -C build install
           sudo ldconfig
